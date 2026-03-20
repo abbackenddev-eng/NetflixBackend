@@ -6,6 +6,7 @@ import com.videostreaming.movieservice.entity.Movie;
 import com.videostreaming.movieservice.service.MovieService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,14 +23,26 @@ public class MovieController {
         return movieService.createMovie(request);
     }
 
-    @GetMapping
-    public List<MovieResponse> getAllMovies(){
-        return movieService.getAllMovies();
+    @PutMapping("/{id}")
+    public MovieResponse updateMovie(@PathVariable Long id,@Valid @RequestBody MovieRequest request){
+        return movieService.updateMovie(id, request);
     }
 
 
     @GetMapping("/{id}")
     public MovieResponse getMovieById(@PathVariable Long id){
         return movieService.getMovieById(id);
+    }
+
+    @GetMapping
+    public Page<MovieResponse> getAllMovies(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "5") int size){
+        return movieService.getAllMovies(page, size);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteMovie(@PathVariable Long id){
+        movieService.deleteMovie(id);
+        return "Movie deleted successfully";
     }
 }
