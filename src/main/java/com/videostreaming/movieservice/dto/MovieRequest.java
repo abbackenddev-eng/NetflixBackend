@@ -3,11 +3,11 @@ package com.videostreaming.movieservice.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MovieRequest {
 
     @NotBlank(message = "Title is Required")

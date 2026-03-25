@@ -5,8 +5,7 @@ import lombok.*;
 
 @Entity
 @Table(name ="movies")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Movie {
