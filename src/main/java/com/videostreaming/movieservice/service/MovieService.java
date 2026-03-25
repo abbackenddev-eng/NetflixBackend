@@ -2,6 +2,7 @@ package com.videostreaming.movieservice.service;
 
 import com.videostreaming.movieservice.dto.MovieRequest;
 import com.videostreaming.movieservice.dto.MovieResponse;
+import com.videostreaming.movieservice.dto.PagedResponse;
 import com.videostreaming.movieservice.entity.Movie;
 import com.videostreaming.movieservice.exception.ResourceNotFoundException;
 import com.videostreaming.movieservice.repository.MovieRepository;
@@ -49,12 +50,12 @@ public class MovieService {
         );
     }
 
-    public List<MovieResponse> getAllMovies(){
-        return movieRepository.findAll()
-                .stream()
-                .map(this::mapToResponse)
-                .toList();
-    }
+//    public List<MovieResponse> getAllMovies(){
+//        return movieRepository.findAll()
+//                .stream()
+//                .map(this::mapToResponse)
+//                .toList();
+//    }
 
     public MovieResponse updateMovie(Long id, MovieRequest request){
 
@@ -81,13 +82,33 @@ public class MovieService {
 
     }
 
-    public Page<MovieResponse> getAllMovies(int page, int size){
+//    public Page<MovieResponse> getAllMovies(int page, int size){
+//
+//        Pageable pageable= PageRequest.of(page, size);
+//
+//        Page<Movie> moviePage = movieRepository.findAll(pageable);
+//
+//        return moviePage.map(this::mapToResponse);
+//    }
 
-        Pageable pageable= PageRequest.of(page, size);
+    public PagedResponse<List<MovieResponse>> getAllMovies(int page, int size){
+
+        Pageable pageable = PageRequest.of(page, size);
 
         Page<Movie> moviePage = movieRepository.findAll(pageable);
 
-        return moviePage.map(this::mapToResponse);
+        List<MovieResponse> content = moviePage
+                .map(this::mapToResponse)
+                .getContent();
+
+        return new PagedResponse<>(
+                content,
+                moviePage.getNumber(),
+                moviePage.getSize(),
+                moviePage.getTotalElements(),
+                moviePage.getTotalPages()
+        );
+
     }
 
     public void deleteMovie(Long id){
